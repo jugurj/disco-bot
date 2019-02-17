@@ -1,13 +1,23 @@
 const Discord = require('discord.js');
-const { prefix, token } = require('./config.json');
+const { prefixes, token } = require('./config.json');
 const client = new Discord.Client();
 
 client.once('ready', () => {
     console.log("Ready!")
 });
 
+function isValidPrefix(msg, command) {
+    for (var index in prefixes) {
+        if (msg.content.startsWith(prefixes[index] + command)) return true;
+    } return false;
+}
+
+function responseMessage(responseType, targetMember) {
+    return `Hello ${targetMember}!`
+}
+
 client.on('message', msg => {
-    if (msg.content.startsWith(`${prefix}kick`)) {
+    if (isValidPrefix(msg, "kick")) {
         let kickTarget = msg.mentions.members.first();
 
         kickTarget.kick().then((member) => {
@@ -15,8 +25,8 @@ client.on('message', msg => {
         });
     }
 
-    if (msg.content.startsWith(`${prefix}hello`)) {
-        msg.channel.send(`Hello ${msg.author.username}!`);
+    if (isValidPrefix(msg, "hello")) {
+        msg.channel.send(responseMessage("greeting", msg.author.username));
     }
 })
 
