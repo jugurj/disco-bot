@@ -7,7 +7,17 @@ client.once('ready', () => {
 });
 
 client.on('message', msg => {
-    console.log(msg.content);
+    if (msg.content.startsWith(`${prefix}kick`)) {
+        let kickTarget = msg.mentions.members.first();
+
+        kickTarget.kick().then((member) => {
+            msg.channel.send(`Risa Chan kicks ${member.displayName}!`);
+        });
+    }
+
+    if (msg.content.startsWith(`${prefix}hello`)) {
+        msg.channel.send(`Hello ${msg.author.username}!`);
+    }
 })
 
 client.login(token);
